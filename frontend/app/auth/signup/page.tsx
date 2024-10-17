@@ -1,4 +1,4 @@
-"use client"; // Ensure this is at the top
+"use client";
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +10,10 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import AxiosInstance from '@/utils/axios';
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -26,6 +28,7 @@ const formSchema = z.object({
     .min(6, { message: 'Password must be at least 6 characters long.' }),
 });
 
+
 // Profile form component
 export function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,11 +39,16 @@ export function ProfileForm() {
       password: '',
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values); // Logs the form values
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response=await AxiosInstance.post("/api/auth/signup",values); 
+      router.push("/dashboard")
+    } catch (error) {
+      console.error("Login failed", error);
+    }
   }
-
+  
+  const router=useRouter();
   return (
     <div>
       <h1 className="text-4xl font-bold mb-4 text-gray-800">SignUp </h1>
@@ -52,7 +60,6 @@ export function ProfileForm() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Username field */}
           <FormField
             control={form.control}
             name="username"
@@ -119,3 +126,7 @@ const Page = () => {
 };
 
 export default Page;
+function setAccessToken(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

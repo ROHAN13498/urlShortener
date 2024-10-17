@@ -45,10 +45,9 @@ export function ProfileForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await AxiosInstance.post("/auth/signup",values); 
+      await AxiosInstance.post("/api/auth/signup",values); 
       console.log("Signup Successfull successful");
       router.push("/dashboard")
-
     } catch (error) {
       console.error("Login failed", error);
     }
