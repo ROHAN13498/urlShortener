@@ -1,10 +1,12 @@
 import { BarChart, Zap, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Navbar from "../_components/NavBar/NavBar";
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
+      <Navbar/>
       <main>
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 flex flex-col items-center justify-center">
           <div className="container px-4 md:px-6">
