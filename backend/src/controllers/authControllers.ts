@@ -75,7 +75,7 @@ export const refreshToken = async (req: Request, res: Response) => {
             httpOnly: true, 
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict", 
-            maxAge: 1 * 60 * 1000, 
+            maxAge: 7 * 24 * 60 * 60 * 1000, 
         });
 
         return res.status(200).json({ message: "Access token refreshed" });
@@ -124,6 +124,12 @@ export const signUp = async (req: Request, res: Response) => {
                 password: await bcrypt.hash(password, 10), 
             },
         });
+        const newWorkSpace= await prisma.workspace.create({
+            data:{
+                name:"default",
+                userId:newUser.id
+            }
+        })
 
         res.status(201).json({ message: "User registered successfully", user: { id: newUser.id, username: newUser.username, email: newUser.email } });
     } catch (error) {

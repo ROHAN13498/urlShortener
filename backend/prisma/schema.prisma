@@ -26,14 +26,16 @@ model Workspace {
 }
 
 model Url {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  shortUrl  String   @unique               
-  longUrl   String                        
-  createdAt DateTime @default(now())        
-  clicks    Click[]                       
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  shortUrl    String   @unique               
+  longUrl     String                        
+  createdAt   DateTime @default(now())      
+  expiresAt   DateTime?                     
+  clicks      Click[]                       
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId String   @db.ObjectId
 }
+
 
 model Click {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId

@@ -41,7 +41,7 @@ export function ProfileForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', values, { withCredentials: true });
-      router.push("/dashboard");
+      router.push("/dashboard/default");
       console.log("Login successful");
     } catch (error: any) {
       if (error.response && error.response.data.message) {

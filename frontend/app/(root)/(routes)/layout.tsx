@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="w-full">
         <div className="fixed z-10 bg-white w-full md:pr-[14rem] h-[65px]">
           <Navbar />
         </div>

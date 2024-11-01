@@ -2,8 +2,8 @@
 import AxiosInstance from "@/utils/axios";
 import React, { useEffect, useState } from "react";
 import WorkSpacesDialog from "./WorkSpacesDailog";
-
-
+import { useRouter, usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface Workspace {
   name: string;
@@ -25,20 +25,37 @@ const WorkSpaces = () => {
     fetchWorkspaces();
   }, []);
 
+  function WorkspaceItem({ name }: { name: string }) {
+    const router = useRouter();
+    const pathName = usePathname();
+    const currentWorkSpace = pathName.split("/")[2];
+
+    {console.log(currentWorkSpace+"  "+name)}
+    return (
+      <button
+        onClick={() => {
+          router.push(`/dashboard/${name}`);
+        }}
+        className={cn(
+          "flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm  hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all",
+          { "bg-slate-300/40": name === currentWorkSpace }
+        )}
+      >
+        <span className="h-2 w-2 rounded-full bg-sky-500" />
+        <span>{name}</span>
+      </button>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center p-4">
-      <ul className="space-y-2 w-full max-w-md">
+    <div className="flex flex-col">
+      <div className="space-y-1">
         {workSpaces.map((workspace, index) => (
-          <li
-            key={index}
-            className="bg-gray-50 rounded-md p-2 transition-colors duration-200 hover:bg-gray-300"
-          >
-            <h2 className="text-sm font-medium text-gray-800">{workspace.name}</h2>
-          </li>
+          <WorkspaceItem key={index} name={workspace.name} />
         ))}
-      </ul>
+      </div>
       <div className="mt-4">
-        <WorkSpacesDialog  /> 
+        <WorkSpacesDialog />
       </div>
     </div>
   );
