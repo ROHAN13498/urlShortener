@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,24 +12,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AxiosInstance from "@/utils/axios";
 import { Plus } from "lucide-react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
+interface WorkSpacesDialogProps {
+  fetchWorkspaces: () => Promise<void>;
+}
 
-
-const WorkSpacesDialog: React.FC = () => {
-  const router=useRouter();
+const WorkSpacesDialog: React.FC<WorkSpacesDialogProps> = ({ fetchWorkspaces }) => {
+  const router = useRouter();
   const [workspaceName, setWorkspaceName] = useState("");
 
   const createWorkSpace = async () => {
     try {
       await AxiosInstance.post("/api/user/workspace", { name: workspaceName });
-      setWorkspaceName("");
       toast.success("New Workspace Created");
-      window.location.reload()
+      await fetchWorkspaces();  // Update the workspace list
+      router.push(`/dashboard/${workspaceName}`);
     } catch (error: any) {
       console.log(error);
       toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setWorkspaceName("");
     }
   };
 
@@ -41,7 +43,7 @@ const WorkSpacesDialog: React.FC = () => {
       <DialogTrigger>
         <div className="rounded-md cursor-pointer flex items-center gap-x-2 ">
           <Plus size={16} />
-          <span className="text-sm text-gray-700">Add New Workplace</span>
+          <span className="text-sm text-gray-700 text-nowrap">Add New Workspace</span>
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -60,7 +62,7 @@ const WorkSpacesDialog: React.FC = () => {
               id="name"
               placeholder="New Workspace"
               value={workspaceName}
-              onChange={(e) => setWorkspaceName(e.target.value)} 
+              onChange={(e) => setWorkspaceName(e.target.value)}
               className="col-span-3"
             />
           </div>

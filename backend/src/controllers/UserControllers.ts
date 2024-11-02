@@ -81,6 +81,9 @@ export async function getWorkSpaces(req: UserRequest, res: Response) {
       where: {
         userId: user?.id,
       },
+      orderBy: {
+        createdAt: "asc",
+      },
     });
 
     return res.status(200).json(workspaces);
@@ -104,6 +107,19 @@ export async function getUrls(req: UserRequest, res: Response) {
   if (!user) {
     return res.status(404).json({ message: "User not Found" });
   }
+}
+
+export async function getLongUrl(req: Request, res: Response) {
+  const shortUrl = req.params.shorturl;
+  console.log(shortUrl);
+  const url = await prisma.url.findFirst({
+    where: {
+      shortUrl: shortUrl,
+    },
+  });
+  console.log(url)
+
+  return res.status(200).json({ link: url?.longUrl });
 }
 
 export async function createLink(req: UserRequest, res: Response) {
@@ -149,6 +165,7 @@ export async function createLink(req: UserRequest, res: Response) {
         workspaceId: userWorkSpace.id,
       },
     });
+    console.log(newLink)
     return res.status(201).json({ message: "Link Created", link: newLink });
   } catch (error) {
     console.error(error);

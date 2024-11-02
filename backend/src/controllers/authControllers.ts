@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 export const login = async (req: Request, res: Response) => {
-    console.log("login requst")
+    console.log("login request");
     const { email, password } = req.body; 
 
     try {
@@ -31,24 +31,21 @@ export const login = async (req: Request, res: Response) => {
             data: { refreshToken },
         });
 
-        // Set both refresh and access tokens in cookies
         res.cookie("accessToken", accessToken, {
             httpOnly: true, 
             secure: process.env.NODE_ENV === "production", 
-            sameSite: "strict", 
-            maxAge: 15* 60 * 1000, 
+            sameSite: "strict" 
         });
-        console.log("access token set")
+        console.log("access token set");
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", 
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: "strict"
         });
-        console.log("refresh token set")
+        console.log("refresh token set");
 
-        res.status(200).json({ message: "Login successful",accessToken });
+        res.status(200).json({ message: "Login successful", accessToken });
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -56,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
-    console.log("Requesting for new access token");
+    console.log("Requesting new access token");
     const token = req.cookies.refreshToken; 
 
     if (!token) return res.status(401).json({ message: "Refresh token missing" });
@@ -70,12 +67,10 @@ export const refreshToken = async (req: Request, res: Response) => {
 
         const accessToken = createAccessToken({ id: user.id, username: user.username });
 
-        // Set the new access token in cookies
         res.cookie("accessToken", accessToken, {
             httpOnly: true, 
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict", 
-            maxAge: 7 * 24 * 60 * 60 * 1000, 
+            sameSite: "strict",
         });
 
         return res.status(200).json({ message: "Access token refreshed" });

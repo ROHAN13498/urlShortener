@@ -10,11 +10,9 @@ async function clearDatabase() {
     // Delete Urls next, which are related to Workspaces
     await prisma.url.deleteMany();
 
-    // Delete Workspaces after Urls, as Workspaces belong to Users
     await prisma.workspace.deleteMany();
 
-    // Finally, delete Users
-    await prisma.user.deleteMany();
+    // await prisma.user.deleteMany();
 
     console.log("Database cleared successfully");
   } catch (error) {

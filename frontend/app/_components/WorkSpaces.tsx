@@ -1,4 +1,3 @@
-"use client";
 import AxiosInstance from "@/utils/axios";
 import React, { useEffect, useState } from "react";
 import WorkSpacesDialog from "./WorkSpacesDailog";
@@ -30,14 +29,13 @@ const WorkSpaces = () => {
     const pathName = usePathname();
     const currentWorkSpace = pathName.split("/")[2];
 
-    {console.log(currentWorkSpace+"  "+name)}
     return (
       <button
         onClick={() => {
           router.push(`/dashboard/${name}`);
         }}
         className={cn(
-          "flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm  hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all",
+          "flex w-full items-center gap-2 rounded-md px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground hover:scale-105 transition-all",
           { "bg-slate-300/40": name === currentWorkSpace }
         )}
       >
@@ -55,7 +53,7 @@ const WorkSpaces = () => {
         ))}
       </div>
       <div className="mt-4">
-        <WorkSpacesDialog />
+        <WorkSpacesDialog fetchWorkspaces={fetchWorkspaces} />
       </div>
     </div>
   );
